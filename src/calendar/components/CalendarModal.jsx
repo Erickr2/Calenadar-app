@@ -30,10 +30,9 @@ Modal.setAppElement('#root'); //me ayuda a sobreponer el modal en toda la pp
 export const CalendarModal = () => {
 
     //extraigo mi metodo para cerrar el modal
-    const { closeDateModal } = useUiStore();
-    const { activeEvent } = useCalendarStore();
+    const { closeDateModal, isDateModalOpen } = useUiStore();
+    const { activeEvent, startSavingEvent } = useCalendarStore();
 
-    const { isDateModalOpen } =  useUiStore();//propiedad para saber si mi modal esta abierto o no
     //estado que me sirve para saber si mi form ya fue ejecutado
     const [formSubmitted, setFormSubmitted] = useState(false)
 
@@ -85,7 +84,7 @@ export const CalendarModal = () => {
     }
 
     //funcion para controlar el submit del form
-    const onSubmit = ( event ) => {
+    const onSubmit = async( event ) => {
         event.preventDefault();
         setFormSubmitted(true);
 
@@ -97,7 +96,13 @@ export const CalendarModal = () => {
 
         if(formValues.title.length <= 0) return; //si mi nota esta vacia no hagas nada
 
-        console.log(formValues)
+        console.log(formValues);
+        //espera a que se guarde la nota y se manda lo que hay en mi estado fomValues
+        await startSavingEvent( formValues );
+        //cierro la nota
+        closeDateModal();
+        //modifico mi form para que no me mande warnings
+        setFormSubmitted(false);
     }
 
     return (

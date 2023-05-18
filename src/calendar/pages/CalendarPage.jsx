@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-import { CalendarEvent, CalendarModal, Navbar } from "../"
+import { CalendarEvent, CalendarModal, FabAddNew, FabDelete, Navbar } from "../"
+
 import { getMessages, localizer } from '../../helpers';
-import { useState } from 'react';
 import { useUiStore, useCalendarStore } from '../../hooks';
 
 //pagina del calendario, recibe mi componente navbar
@@ -64,7 +65,9 @@ export const CalendarPage = () => {
         onView={onViewChange}
       />
 
-      <CalendarModal />
+      <CalendarModal /> {/* componente de la ventana que se abre en mi calendario  */}
+      <FabAddNew /> {/* componenete(boton) para agregar una nueva actividad */}
+      <FabDelete />
     </>
   )
 }
