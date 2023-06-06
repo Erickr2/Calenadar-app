@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AppRouter } from "./router";
 import { store } from './store';
 
+
 //contiene las rutas de mi app, que se encuentran en AppRouter
 
 export const CalendarApp = () => {
