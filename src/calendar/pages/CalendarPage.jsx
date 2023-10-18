@@ -1,25 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 import { CalendarEvent, CalendarModal, FabAddNew, FabDelete, Navbar } from "../"
 
 import { getMessages, localizer } from '../../helpers';
-import { useUiStore, useCalendarStore } from '../../hooks';
+import { useUiStore, useCalendarStore, useAuthStore } from '../../hooks';
+
 
 //pagina del calendario, recibe mi componente navbar
-
 export const CalendarPage = () => {
 
   const { openDateModal } = useUiStore(); //extraigo el metodo openDateModal
-  const { events, setActiveEvent } = useCalendarStore(); //extraigo la propiedad events de mi calendar store
+  const { events, setActiveEvent, startloadingEvents } = useCalendarStore(); //extraigo la propiedad events de mi calendar store
+  const { user } = useAuthStore();
 
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'week') //mi estado inicial es lo que hay en mi localstorage, si no hay nada el valor por defecto es week
 
   const eventStyleGetter = (event, start, end, isSelected) => {
 
+    const isMyEvent = (user.uid === event.user._id) || (user.uid === event.user.uid); 
+
     const style = {
-      backgroundColor: '#347cf7',
+      backgroundColor: isMyEvent ? '#F472DB' : '#465660',
       borderRadius: '0px',
       opacity: 0.8,
       color: 'white'
@@ -42,6 +45,12 @@ export const CalendarPage = () => {
     localStorage.setItem('lastView', event)
     setLastView(event)
   }
+
+  //cuando carga la vista del calendar me traigo mis eventos con la funcion startloadingEvents
+  useEffect(() => {
+    startloadingEvents();
+  }, [])
+  
 
   return (
     <>
